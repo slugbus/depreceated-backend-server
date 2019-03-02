@@ -2,6 +2,7 @@ package bus
 
 import (
 	"busplusplus/internal/database"
+	"github.com/slugbus/slugger"
 	"context"
 	"fmt"
 	"log"
@@ -20,7 +21,7 @@ var CurrentBusState SlugResponsePlusPlus
 func init() {
 	if !useDummy {
 		// Make an array of responses
-		arrOfBuses := []*SlugResponse{}
+		arrOfBuses := []SlugResponse{}
 		// Keep a count
 		count := 0
 		// Ping the server twice over the course of deltaT ms
@@ -28,7 +29,8 @@ func init() {
 			if count == 2 {
 				break
 			}
-			bus, err := GetBus()
+			//bus, err := GetBus()
+			bus, err := slugger.Query()
 			if err != nil {
 				log.Printf("could not get bus info: %v\n", err)
 				return
@@ -68,7 +70,8 @@ func asyncUpdate() {
 		updateDB()
 
 		// Otherwise ping the server again
-		newPing, err := GetBus()
+		//newPing, err := GetBus()
+		newPing, err := slugger.Query()
 		if err != nil {
 			log.Println("could not get bus data: ", err)
 			continue
@@ -95,15 +98,15 @@ func updateDB() {
 func DRtoSRPP(dr database.DummyResponse) SlugResponsePlusPlus {
 	conversion := SlugResponsePlusPlus{}
 	for _, buses := range dr.Buses {
-		simpleConvertedBus := Data{
+		simpleConvertedBus := slugger.Bus{
 			ID:   buses.ID,
 			Lat:  buses.Lat,
 			Lon:  buses.Lon,
 			Type: buses.Type,
 		}
-		convertedBus := DataPlusPlus{
+		convertedBus := BusDataPlusPlus{
 			Angle: buses.Angle,
-			Data:  simpleConvertedBus,
+			Bus:  simpleConvertedBus,
 			Speed: buses.Speed,
 		}
 		conversion = append(conversion, convertedBus)

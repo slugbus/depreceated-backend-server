@@ -1,17 +1,20 @@
 package bus
 
-import "busplusplus/internal/geo"
+import (
+	"busplusplus/internal/geo"
+	"github.com/slugbus/slugger"
+)	
 
 // This function merges a new ping response with the current
 // response
-func mergeWithState(p *SlugResponse, t float64) SlugResponsePlusPlus {
-	pingHash := map[string]Data{}
-	stateHash := map[string]DataPlusPlus{}
+func mergeWithState(p SlugResponse, t float64) SlugResponsePlusPlus {
+	pingHash := map[string]slugger.Bus{}
+	stateHash := map[string]BusDataPlusPlus{}
 
 	// Hash the buses from the
 	// old and current state into
 	// their own tables
-	for _, bus := range *p {
+	for _, bus := range p {
 		pingHash[bus.ID] = bus
 	}
 	for _, bus := range CurrentBusState {
@@ -23,8 +26,8 @@ func mergeWithState(p *SlugResponse, t float64) SlugResponsePlusPlus {
 
 	for key, pingBus := range pingHash {
 		// Prepare the struct
-		dataPoint := DataPlusPlus{
-			Data: pingBus,
+		dataPoint := BusDataPlusPlus{
+			Bus: pingBus,
 		}
 		// Check to see if the bus we're looking
 		// at was in our previous state, if it was
@@ -45,13 +48,13 @@ func mergeWithState(p *SlugResponse, t float64) SlugResponsePlusPlus {
 // Merge update takes in two regular responses from the server
 // and t (that is in milliseconds) and combines them to get speed
 // and angle data.
-func mergeUpdate(p, q *SlugResponse, t float64) SlugResponsePlusPlus {
+func mergeUpdate(p, q SlugResponse, t float64) SlugResponsePlusPlus {
 	// Make of map of strings
 	// to buses
-	mb := map[string]Data{}
+	mb := map[string]slugger.Bus{}
 	// Loop through first
 	// ping
-	for _, bus := range *p {
+	for _, bus := range p {
 		// Map the bus ID to the
 		// bus datastructure
 		mb[bus.ID] = bus
@@ -59,11 +62,11 @@ func mergeUpdate(p, q *SlugResponse, t float64) SlugResponsePlusPlus {
 	// Prepare a result
 	result := SlugResponsePlusPlus{}
 	// Loop through the second ping
-	for _, pingTwoBus := range *q {
+	for _, pingTwoBus := range q {
 		// Make a bus with angles and speed
-		d := DataPlusPlus{}
+		d := BusDataPlusPlus{}
 		// Add the buses' data to the bus++?
-		d.Data = pingTwoBus
+		d.Bus = pingTwoBus
 		// Check if the current bus exists in ping one
 		if pingOneBus, contains := mb[d.ID]; contains {
 			// If it does, calculate its distance, speed , and angle
