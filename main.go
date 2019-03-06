@@ -1,7 +1,6 @@
 package main
 
 import (
-	"busplusplus/internal/routes"
 	"context"
 	"flag"
 	"log"
@@ -11,6 +10,7 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/slugbus/backend-server/internal/routes"
 )
 
 func main() {

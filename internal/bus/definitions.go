@@ -1,18 +1,18 @@
 package bus
 
 import (
-	"github.com/slugbus/slugger"
+	"github.com/slugbus/taps"
 )
 
 // SlugResponse is a collection
-// of Bus structs from the slugger wrapper
-type SlugResponse []slugger.Bus
+// of Bus structs from the taps wrapper
+type SlugResponse []taps.Bus
 
 // BusDataPlusPlus is a structure that
 // contains data from Bus but with more
 // info
 type BusDataPlusPlus struct {
-	slugger.Bus
+	taps.Bus
 	Speed float64 `json:"speed"`
 	Angle float64 `json:"angle"`
 }

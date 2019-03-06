@@ -1,14 +1,14 @@
 package bus
 
 import (
-	"busplusplus/internal/geo"
-	"github.com/slugbus/slugger"
-)	
+	"github.com/slugbus/backend-server/internal/geo"
+	"github.com/slugbus/taps"
+)
 
 // This function merges a new ping response with the current
 // response
 func mergeWithState(p SlugResponse, t float64) SlugResponsePlusPlus {
-	pingHash := map[string]slugger.Bus{}
+	pingHash := map[string]taps.Bus{}
 	stateHash := map[string]BusDataPlusPlus{}
 
 	// Hash the buses from the
@@ -51,7 +51,7 @@ func mergeWithState(p SlugResponse, t float64) SlugResponsePlusPlus {
 func mergeUpdate(p, q SlugResponse, t float64) SlugResponsePlusPlus {
 	// Make of map of strings
 	// to buses
-	mb := map[string]slugger.Bus{}
+	mb := map[string]taps.Bus{}
 	// Loop through first
 	// ping
 	for _, bus := range p {

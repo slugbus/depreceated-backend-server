@@ -1,12 +1,13 @@
 package bus
 
 import (
-	"busplusplus/internal/database"
-	"github.com/slugbus/slugger"
 	"context"
 	"fmt"
 	"log"
 	"time"
+
+	"github.com/slugbus/backend-server/internal/database"
+	"github.com/slugbus/taps"
 )
 
 // This var controls how frequently
@@ -30,7 +31,7 @@ func init() {
 				break
 			}
 			//bus, err := GetBus()
-			bus, err := slugger.Query()
+			bus, err := taps.Query()
 			if err != nil {
 				log.Printf("could not get bus info: %v\n", err)
 				return
@@ -71,7 +72,7 @@ func asyncUpdate() {
 
 		// Otherwise ping the server again
 		//newPing, err := GetBus()
-		newPing, err := slugger.Query()
+		newPing, err := taps.Query()
 		if err != nil {
 			log.Println("could not get bus data: ", err)
 			continue
@@ -98,7 +99,7 @@ func updateDB() {
 func DRtoSRPP(dr database.DummyResponse) SlugResponsePlusPlus {
 	conversion := SlugResponsePlusPlus{}
 	for _, buses := range dr.Buses {
-		simpleConvertedBus := slugger.Bus{
+		simpleConvertedBus := taps.Bus{
 			ID:   buses.ID,
 			Lat:  buses.Lat,
 			Lon:  buses.Lon,
@@ -106,7 +107,7 @@ func DRtoSRPP(dr database.DummyResponse) SlugResponsePlusPlus {
 		}
 		convertedBus := BusDataPlusPlus{
 			Angle: buses.Angle,
-			Bus:  simpleConvertedBus,
+			Bus:   simpleConvertedBus,
 			Speed: buses.Speed,
 		}
 		conversion = append(conversion, convertedBus)
