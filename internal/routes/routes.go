@@ -1,13 +1,14 @@
 package routes
 
 import (
-	"busplusplus/internal/bus"
 	"encoding/json"
 	"log"
 	"math/rand"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/slugbus/backend-server/internal/bus"
 )
 
 // HeatData is a structure that

@@ -1,12 +1,13 @@
 package bus
 
 import (
-	"busplusplus/internal/database"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	"github.com/slugbus/backend-server/internal/database"
 )
 
 // // GetDistanceBusToStop is used to calculate the distance to the closest
